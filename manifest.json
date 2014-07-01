@@ -9,27 +9,11 @@
 		"128": "images/bookmark.png"
 	},
 	"browser_action": {
-		"default_icon":{
-			"19": "images/bookmark.png",
-			"38": "images/bookmark.png"
-		},
-		"default_title": "search bookmark",
 		"default_popup":"popup.html"
 	},
-	 "commands": {
-	    "toggle-feature": {
-	      "suggested_key": { "default": "Ctrl+Shift+K" },
-	      "description": "Send a 'toggle-feature' event to the extension"
-	    },
-	    "_execute_browser_action": {
-	      "suggested_key": {
-	        "default": "Ctrl+Shift+F",
-	        "mac": "MacCtrl+Shift+F"
-	      }
-	    }
-	  },
+
 	"background":{
-		"scripts": ["background.js"]
+		"scripts": ["js/background.js"]
 	},
 	"content_scripts":[
 		{
@@ -39,7 +23,11 @@
 		}
 	],
 	"permissions": [
-		"bookmarks",
-		"storage"
+	    "tabs",
+	    "bookmarks",
+	    "history",
+	    "clipboardRead",
+	    "storage",
+	    "<all_urls>"
 	]
 }
