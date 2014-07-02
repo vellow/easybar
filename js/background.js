@@ -1,4 +1,4 @@
-var all_bookmark, r = new Array;
+var all_bookmark, r = new Array();
 
 chrome.bookmarks.getTree(function(bookmarkArray){
 	 all_bookmark = bookmarkArray;
@@ -7,14 +7,33 @@ chrome.bookmarks.getTree(function(bookmarkArray){
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 	r = [];
 	console.log(request);
-	search_url(request, all_bookmark);	
+	dispatch(request);
 	sendResponse(r.join(""));  
 });
 
-function search_url(req, arr, context){
+
+console.log(chrome.runtime)
+
+function dispatch(q){
+	switch(q.qtype){
+		case "search_bookmarks":
+			search_bookmarks(q.qdata, all_bookmark);
+			break;
+		case "newtab":
+			create_tab(q.qdata);
+			break;
+	}
+}
+
+function create_tab(url){
+	chrome.tabs.create({url: url})
+}
+
+function search_bookmarks(req, arr, context){
+	if(!req) return
 	for (var i=0; i<arr.length; i++ ){
 		if( arr[i].hasOwnProperty("children") ){
-			search_url(req, arr[i].children, arr[i]);
+			arguments.callee(req, arr[i].children, arr[i]);
 		} else{
 			if( (arr[i].title.toLowerCase().indexOf(req)) !=-1 || (arr[i].url.toLowerCase().indexOf(req)) !=-1 ){
 				concat_result(arr[i].title, arr[i].url, req)
