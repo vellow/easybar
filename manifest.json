@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
-	"name": "search_bookmark",
+	"name": "easybar",
 	"version": "1.0",
-	"description": "search in bookmark",
+	"description": "Make Chrome more easy to use",
 	"icons": {
 		"16": "images/bookmark.png",
 		"48": "images/bookmark.png",
@@ -18,7 +18,7 @@
 	"content_scripts":[
 		{
 			"matches":["http://*/*"],
-			"js":["js/shortcut.js", "js/content.js"],
+			"js":["js/shortcut.js", "js/easybar.js"],
 			"css":["css/content.css"]
 		}
 	],

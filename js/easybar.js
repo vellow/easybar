@@ -40,6 +40,10 @@ var easyDiv = document.getElementById("vomnibar"),
 
 var hisMode = false;
 
+var bookmarks, histories;
+
+chrome.storage.local.get("bookmarks", function(r){console.log(r)})
+
 var Easybar = {
 	bind_shortcut: function(ops){
 		for (i in ops){
@@ -48,6 +52,7 @@ var Easybar = {
 	},
 
 	open: function(){
+		chrome.storage.local.get("bookmarks", function(r){bookmarks = r})
 		easyDiv.style.display = "block";
 		sInput.focus()
 		sInput.onkeyup = function(e){

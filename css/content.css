@@ -404,3 +404,5 @@ div#vimiumFlash {
   position: absolute;
   z-index: 99999;
 }
+
+#sHeader{font-size:18px;color:#aaa;text-align:center;line-height:30px;}
