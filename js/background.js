@@ -8,16 +8,19 @@ chrome.runtime.onMessage.addListener(function(request, sender, foo){
 	rq = request;
 	mySender = sender;
 	dispatch(request);
+	console.log(request)
 });
 
 
 function dispatch(q){
 	switch(q.type){
 		case "bookmark":
+			console.log(q.data)
 			chrome.bookmarks.search(q.data, Data.handle_results);
 			break;
 
 		case "history":
+			console.log(q.data);
 			chrome.history.search(q.data, Data.handle_results);
 			break;
 
