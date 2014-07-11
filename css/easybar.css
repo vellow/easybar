@@ -1,0 +1,198 @@
+/*
+ * Many CSS class names in this file use the verbose "vimiumXYZ" as the class name. This is so we don't
+ * use the same CSS class names that the page is using, so the page's CSS doesn't mess with the style of our
+ * Vimium dialogs.
+ */
+
+/*
+ * This ebarReset class can be added to any of our UI elements to give it a clean slate. This is useful in
+ * case the page has declared a broad rule like "a { padding: 50px; }" which will mess up our UI. These
+ * declarations contain more specifiers than necessary to increase their specificity (precedence).
+ */
+.ebarReset,
+div.ebarReset,
+span.ebarReset,
+table.ebarReset,
+a.ebarReset,
+a:visited.ebarReset,
+a:link.ebarReset,
+a:hover.ebarReset,
+td.ebarReset,
+tr.ebarReset {
+  background: none;
+  border: none;
+  bottom: auto;
+  box-shadow: none;
+  color: black;
+  cursor: auto;
+  display: inline;
+  float: none;
+  font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: inherit;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  height: auto;
+  left: auto;
+  letter-spacing: 0;
+  line-height: 100%;
+  margin: 0;
+  max-height: none;
+  max-width: none;
+  min-height: 0;
+  min-width: 0;
+  opacity: 1;
+  padding: 0;
+  position: static;
+  right: auto;
+  text-align: left;
+  text-decoration: none;
+  text-indent: 0;
+  text-shadow: none;
+  text-transform: none;
+  top: auto;
+  vertical-align: baseline;
+  white-space: normal;
+  width: auto;
+  z-index: 99999999;
+}
+
+
+/* easybar CSS */
+
+#easybar ol, #easybar ul {
+  list-style: none;
+  display: block;
+}
+
+#easybar {
+  display: block;
+  position: fixed;
+  width: 80%;
+  min-width: 400px;
+  top: 70px;
+  left: 50%;
+  margin: 0 0 0 -40%;
+  font-family: sans-serif;
+
+  background: #F1F1F1;
+  text-align: left;
+  border-radius: 4px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.8);
+  border: 1px solid #aaa;
+  /* One less than hint markers and the help dialog. */
+  z-index: 99999996;
+}
+
+#easybar input {
+  color: #000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  height: 34px;
+  margin-bottom: 0;
+  padding: 4px;
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid #E8E8E8;
+  box-shadow: #444 0px 0px 1px;
+  width: 100%;
+  outline: none;
+  box-sizing: border-box;
+}
+
+#easybar .easybarSearchArea {
+  display: block;
+  padding: 10px;
+  background-color: #F1F1F1;
+  border-radius: 4px 4px 0 0;
+  border-bottom: 1px solid #C6C9CE;
+}
+
+#easybar ul {
+  background-color: white;
+  border-radius: 0 0 4px 4px;
+  list-style: none;
+  padding: 10px 0;
+  padding-top: 0;
+}
+
+#easybar li {
+  border-bottom: 1px solid #ddd;
+  line-height: 1.1em;
+  padding: 7px 10px;
+  font-size: 16px;
+  color: black;
+  position: relative;
+  display: list-item;
+  margin: auto;
+}
+
+#easybar li:last-of-type {
+  border-bottom: none;
+}
+
+#easybar li .easybarTopHalf, #easybar li .easybarBottomHalf {
+  display: block;
+  overflow: hidden;
+}
+
+#easybar li .easybarBottomHalf {
+  font-size: 15px;
+  margin-top: 3px;
+  padding: 2px 0;
+}
+
+#easybar li .easybarSource {
+  color: #777;
+  margin-right: 4px;
+}
+#easybar li .easybarRelevancy {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 5px;
+  background-color: white;
+  color: black;
+  font-family: monospace;
+  width: 100px;
+  overflow: hidden;
+}
+
+#easybar li .easybarUrl {
+  white-space: nowrap;
+  color: #224684;
+}
+
+#easybar li .easybarMatch {
+  font-weight: bold;
+  color: black;
+}
+
+#easybar li em, #easybar li .easybarTitle {
+  color: black;
+  margin-left: 10px;
+  font-weight: normal;
+}
+#easybar li em { font-style: italic; }
+#easybar li em .easybarMatch, #easybar li .easybarTitle .easybarMatch {
+  color: #333;
+  text-decoration: underline;
+}
+
+#easybar li.easybarSelected {
+  background-color: #BBCEE9;
+  font-weight: normal;
+}
+
+
+
+div#vimiumFlash {
+  box-shadow: 0px 0px 4px 2px #4183C4;
+  padding: 1px;
+  background-color: transparent;
+  position: absolute;
+  z-index: 99999;
+}
+
+#sHeader{font-size:18px;color:#aaa;text-align:center;line-height:30px;padding-top:6px;}
+#easybar span.easybarOrigin{text-transform:capitalize;color:rgb(170,170,170);}

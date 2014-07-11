@@ -1,7 +1,6 @@
 
-chrome.runtime.onMessage.addListener(function( request, sender, sendResponse ){
-	console.log(request)
-	Easybar.show_results(request);
+chrome.runtime.onMessage.addListener(function( resultArray, sender, sendResponse ){
+	Data.build_htmlstr(resultArray)
 })
 
 var status = {
@@ -11,172 +10,203 @@ var status = {
 	derective: false
 }
 
-var defualt_options = {
-	"Shift+Space": "show",
-	"Esc": "hide",
-	"Up": "prev",
-	"Down": "next",
-	"Enter": "newtab"
-}
+var operationMap = [
+	["Shift+Space", "show", "Operation.show_easybar"],
+	["Esc", "hide", "Operation.close_easybar"],
+	["Up", "prev", "Operation.select_prev"],
+	["Down", "next", "Operation.select_next"],
+	["Enter", "newtab", "Operation.newtab"]
+]
 
-var defualt_keywords = {
-	"bkmk": "search_bookmark",
-	"his": "search_history",
-	"google": "search_in_google",
-	"ddg": "search_in_duckduckgo",
-	"ydic": "search_in_youdaodic"
-}
+var directiveMap = [
+	["search_in_bookmark", "bkk", "Search in Bookmark"],
+	["search_in_history", "his", "Search in History"],
+	["search_in_google", "google", "Search in Google"],
+	["search_in_ydic", "ydic", "Search in Youdao Dictionary"],
+	["search_in_wiki", "wiki", "Search in WikiPedia"]
+	["search_in_stackoverflow", "stof", "Search in StackOverflow"]
+]
 
-var defualt_operations = {
-	"j": "down",
-	"k": "up",
-	"h": "left",
-	"l": "right",
-	"t": "new_tab",
-	"f": "find_link"
-}
+// var default_options = {
+// 	"j": "down",
+// 	"k": "up",
+// 	"h": "left",
+// 	"l": "right",
+// 	"t": "new_tab",
+// 	"f": "find_link"
+// }
 
-var handlers = {
-	"show": "Easybar.show",
-	"hide": "Easybar.clear",
-	"prev": "Operation.select_prev",
-	"next": "Operation.select_next",
-	"newtab": "Operation.newtab"
-}
 
-var Ui = {
-	easyDiv: (function(){
-					var easyDiv = document.createElement("div");
-					var str = '<div id="vomnibar" class="vimiumReset" style="display: none;">\
-									    <div id="sHeader"></div>\
-									    <div class="vimiumReset vomnibarSearchArea">\
-											<input type="text" id="sInput" class="vimiumReset">\
-									    </div>\
-									    <ul class="vimiumReset" id="sReset" style="display: none;"></ul>\
-									</div>';
-					easyDiv.innerHTML = str;
-					easyDiv = easyDiv.firstChild;
-					return document.body.appendChild(easyDiv);	
-				})(),
-	sInput: document.getElementById("sInput"),
-	sReset: document.getElementById("sReset"),
-	sHeader: document.getElementById("sHeader"),
-	sSource: function(s){
-		document.getElement
+
+var url;
+var mode = undefined;
+var rq = {};
+
+/* If arr[srcPos] == val, retrun arr[targetPos] */
+function val_in_arr(arr, val, srcPos, targetPos){
+	for(var i=0,len=arr.length; i<len; i++){
+		if( arr[i][srcPos] == val )
+			return arr[i][targetPos]
 	}
-
 }
 
-var Command = {
+function carousel(left, right, idx){
+	return idx < left ? right : (idx > right ? left : idx)
+}
 
-	search_bookmark: function(s){
-		chrome.runtime.sendMessage( {type: "bookmark", data: s} )
+var Directive = {
+	search_in_bookmark: function(str){
+		rq = {
+			type: "bookmark",
+			data: str
+		};
+		chrome.runtime.sendMessage(rq)
 	},
 
-	search_history: function(s){
-		Ui.sHeader.innerText = "Search in History...";
-		chrome.runtime.sendMessage({type: "history", data: {text: s}})	
+	search_in_history: function(str){
+		rq = {
+			type: 'history',
+			data: {
+				text: str
+			}
+		};
+		chrome.runtime.sendMessage(rq)	
+	},
+
+	search_in_google: function(s){
+		url = 'http://google.com/search?q=' + s;
+		Operation.newtab(url)
+	},
+
+	search_in_wiki: function(s){
+		url = 'http://en.wikipedia.org/wiki/' + s;
+		Operation.newtab(url)
+	},
+
+	search_in_stackoverflow: function(s){
+		url = 'http://stackoverflow.com/search?q' + s;
+		Operation.newtab(url)
+	},
+
+	search_in_ydic: function(s){
+		rq = {
+			type: "ydic", 
+			data: s
+		}
+		Elements.sInput.select()
+		var action = 'http://fanyi.youdao.com/openapi.do?keyfrom=init-life&key=304081511&type=data&doctype=json&version=1.1&q=' + s
+		var xhr = new XMLHttpRequest()
+		xhr.open("GET", action)
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState === 4){
+				data = xhr.responseText
+				Data.build_htmlstr(data)
+			}
+		}
+		xhr.send()
 	}
 }
 
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+var Operation = {
+
+	show_easybar: function(){
+		mode = "search_in_bookmark";
+		Ui.show_easybar()
+	},
+
+	close_easybar: function(){
+		mode = undefined;
+		Ui.close_easybar()
+	},
+
+	select_prev: function(){
+		sSelected = document.getElementsByClassName("easybarSelected")[0];
+		sSelected.classList.remove("easybarSelected");
+		if(prev = sSelected.previousElementSibling){
+			prev.classList.add("easybarSelected")
+		} else{
+			Elements.sReset.lastChild.classList.add("easybarSelected")
+		}
+	},
+	select_next: function(){
+		sSelected = document.getElementsByClassName("easybarSelected")[0];
+		sSelected.classList.remove("easybarSelected");
+		if(next = sSelected.nextElementSibling){
+			next.classList.add("easybarSelected")
+			sSelected.classList.remove("easybarSelected");
+		} else {
+			Elements.sReset.firstChild.classList.add("easybarSelected")
+		}
+	},
+	open_selected: function(){
+		if( sSelected = document.getElementsByClassName("easybarSelected")[0] ){
+			var url = sSelected.children[1].innerText;
+			Operation.newtab(url)
+			}
+	},
+	newtab: function(url){
+		// console.log()
+		try{
+			url = document.getElementsByClassName("easybarSelected")[0].children[1].innerText
+		} catch (err) {
+			url = url
+		}
+		if(!url) return
+		chrome.runtime.sendMessage( { type: "newtab", data: url } )
+		Ui.close_easybar()
+	}
+}
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
 var Easybar = {
 
-	command: Command.search_bookmark,
-
-	bind_shortcut: function(ops){
-		for (i in ops){
-			shortcut.add(i, eval(handlers[ops[i]]))
+	bind_shortcut: function(operationMap){
+		for (i in operationMap){
+			shortcut.add(operationMap[i][0], eval( operationMap[i][2] ))
 		}
 	},
 
-	show: function(){
-		Ui.easyDiv.style.display = "block";
-		sInput.focus()
-		sInput.onkeyup = function(e){
-			// prevent up down ...
-			if(e.keyCode > 40 || e.keyCode < 37){
-				Easybar.delegate()
-			}
-		};
-	},
-
-	clear: function(){
-		Ui.sInput.value = "";
-		Ui.sReset.innerHTML = "";
-		Ui.sHeader.innerText = "";	
-		Ui.sReset.style.display = "none";
-		Ui.easyDiv.style.display = "none";
-		for(key in status){
-			status[key] = false
-		}
-	},
 
 	delegate: function(){
-		var str = Ui.sInput.value.toLowerCase();
-		if(!status.mode_1 && str && event.keyCode === 32) {
-			status.mode_1 = true;
-			Ui.sInput.value = "";
-			var match = str.match(/^(\w+)\s/)[1];
-			if( defualt_keywords.hasOwnProperty(match) ){
-				this.command = eval( "Command." + defualt_keywords[match] );
-			} 
-		}
-		this.command(str)	
-	},
-
-	show_results: function(r){
-		if(r){
-			Ui.sReset.innerHTML = r; 
-			Ui.sReset.style.display = "block";
-			// Ui.sReset.children[0].focus();
-			Ui.sReset.children[0].classList.add("vomnibarSelected");
+		var str = Elements.sInput.value.toLowerCase();
+		var dmatch = str.match(/^(\w+)\s/)
+		if( dmatch && event.keyCode === 32){
+			var val = val_in_arr( directiveMap, dmatch[1], 1, 0)
+			if(!val) return
+			mode = val;
+			Ui.clean()
+			Ui.update_header( val_in_arr( directiveMap, dmatch[1], 1, 2) )
 		} else {
-			Ui.sReset.innerHTML = "";
-			Ui.sReset.style.display = "none"
-		}	
+			mode == "search_in_bookmark"
+		}
+
+		if(mode == "search_in_bookmark") {
+			Directive.search_in_bookmark(str)
+
+		} else if(mode == "search_in_history") {
+			Directive.search_in_history(str)
+
+		} else if(mode == "search_in_google" && event.keyCode == 13){
+			Directive.search_in_google(str)
+
+		} else if(mode == "search_in_ydic" && event.keyCode == 13){
+			Directive.search_in_ydic(str)
+
+		} else if(mode == "search_in_wiki" && event.keyCode == 13){
+			Directive.search_in_wiki(str)
+
+		} else if (!mode){
+			Directive.search_in_bookmark(str)
+		}
 	}
 }
 
-
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-
-
-var Operation = {
-	select_prev: function(){
-		sSelected = document.getElementsByClassName("vomnibarSelected")[0];
-		sSelected.classList.remove("vomnibarSelected");
-		if(prev = sSelected.previousElementSibling){
-			prev.classList.add("vomnibarSelected")
-		} else{
-			Ui.sReset.lastChild.classList.add("vomnibarSelected")
-		}
-	},
-	select_next: function(){
-		sSelected = document.getElementsByClassName("vomnibarSelected")[0];
-		sSelected.classList.remove("vomnibarSelected");
-		if(next = sSelected.nextElementSibling){
-			next.classList.add("vomnibarSelected")
-			sSelected.classList.remove("vomnibarSelected");
-		} else {
-			Ui.sReset.firstChild.classList.add("vomnibarSelected")
-		}
-	},
-	newtab: function(){
-		if( sSelected = document.getElementsByClassName("vomnibarSelected")[0] ){
-			var url = sSelected.children[1].innerText;
-			chrome.runtime.sendMessage( { type: "newtab", data: url }, function(){
-				console.log("opening new tab")
-			})
-		}
-	}	
-}
-
-Easybar.bind_shortcut(defualt_options);
+Easybar.bind_shortcut(operationMap);
 
 
 

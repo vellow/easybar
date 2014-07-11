@@ -18,11 +18,12 @@
 	"content_scripts":[
 		{
 			"matches":["http://*/*"],
-			"js":["js/shortcut.js", "js/easybar.js"],
-			"css":["css/content.css"]
+			"js":["js/shortcut.js", "js/factory.js", "js/ui.js", "js/easybar.js"],
+			"css":["css/easybar.css"]
 		}
 	],
 	"permissions": [
+		"http://*/",
 	    "tabs",
 	    "bookmarks",
 	    "history",
