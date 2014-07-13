@@ -5,10 +5,14 @@ Easybar
 
 Hope to be a Alfred in Chrome.  
 
-featrues:
+#### Keybind and Featrues:
 
-1. Quick search in Bookmarks
-2. Quick search in History
-3. Quick search in Youdao Dictionary
-4. Search Google in new tab
-5. Search Wikipedia in new tab
+1. [Shift+Space] --- Lanuch
+2. [Esc]         --- Close
+3. "bkk"[Space]  --- Quick search in Bookmarks
+4. "his"[Space]  --- Quick search in History
+5. "ydic"[Space] --- Quick search in Youdao Dictionary
+6. "gog"[Space]  --- Search Google in new tab
+7. "wiki"[Space] --- Search Wikipedia in new tab
+8. "stof"[Space] --- Search StackOverflow in new tab
+

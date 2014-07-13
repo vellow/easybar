@@ -4,9 +4,9 @@
 	"version": "1.0",
 	"description": "Make Chrome more easy to use",
 	"icons": {
-		"16": "images/bookmark.png",
-		"48": "images/bookmark.png",
-		"128": "images/bookmark.png"
+		"16": "images/hat.png",
+		"48": "images/hat.png",
+		"128": "images/hat.png"
 	},
 	"browser_action": {
 		"default_popup":"popup.html"

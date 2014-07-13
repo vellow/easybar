@@ -21,9 +21,9 @@ var operationMap = [
 var directiveMap = [
 	["search_in_bookmark", "bkk", "Search in Bookmark"],
 	["search_in_history", "his", "Search in History"],
-	["search_in_google", "google", "Search in Google"],
+	["search_in_google", "gog", "Search in Google"],
 	["search_in_ydic", "ydic", "Search in Youdao Dictionary"],
-	["search_in_wiki", "wiki", "Search in WikiPedia"]
+	["search_in_wiki", "wiki", "Search in WikiPedia"],
 	["search_in_stackoverflow", "stof", "Search in StackOverflow"]
 ]
 
@@ -84,7 +84,7 @@ var Directive = {
 	},
 
 	search_in_stackoverflow: function(s){
-		url = 'http://stackoverflow.com/search?q' + s;
+		url = 'http://stackoverflow.com/search?q=' + s;
 		Operation.newtab(url)
 	},
 
@@ -199,6 +199,9 @@ var Easybar = {
 
 		} else if(mode == "search_in_wiki" && event.keyCode == 13){
 			Directive.search_in_wiki(str)
+
+		} else if(mode == "search_in_stackoverflow" && event.keyCode == 13){
+			Directive.search_in_stackoverflow(str)
 
 		} else if (!mode){
 			Directive.search_in_bookmark(str)
