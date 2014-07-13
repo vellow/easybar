@@ -1,7 +1,7 @@
 Easybar
 =============
 
-#### A vimmium ui like, Alfred usage like chrome extension, make web browsing more easy and effective. 
+#### A tiny Vimium ui + Alfred usage Chrome extension, make web browsing more easy and effective. 
 
 Hope to be a Alfred in Chrome.  
 
