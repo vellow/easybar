@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "easybar",
 	"version": "1.0",
-	"description": "Make Chrome more easy to use",
+	"description": "Make Chrome more effective",
 	"icons": {
 		"16": "images/hat.png",
 		"48": "images/hat.png",
