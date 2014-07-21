@@ -3,7 +3,7 @@ Easybar
 
 A tiny Chrome extension, to make web browsing more easy and effective. 
 
-[Easybar](http://i.imgur.com/MXnnxig.gif)
+![Easybar](http://i.imgur.com/MXnnxig.gif)
 
 #### Keybind and Keywords:
 
